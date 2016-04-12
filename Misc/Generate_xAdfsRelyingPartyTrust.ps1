@@ -1,0 +1,53 @@
+#Leaving these properties out at this time because they reference a file that would have to stay on the machine after configuration to verify compliance
+#AdditionalAuthenticationRulesFile = New-xDscResourceProperty -Name AdditionalAuthenticationRulesFile -Type String -Attribute Write -Description "Specifies a file that contains the additional authentication rules to require additional authentication when a user is attempting to access this relying party."
+#$DelegationAuthorizationRulesFile = New-xDscResourceProperty -Name DelegationAuthorizationRulesFile -Type String -Attribute Write -Description "Specifies a file that contains the delegation authorization rules for issuing claims to this relying party."
+#$ImpersonationAuthorizationRulesFile = New-xDscResourceProperty -Name ImpersonationAuthorizationRulesFile -Type String -Attribute Write -Description "Specifies the file that contains the impersonation authorization rules for issuing claims to this relying party."
+#$IssuanceAuthorizationRulesFile = New-xDscResourceProperty -Name IssuanceAuthorizationRulesFile -Type String -Attribute Write -Description "Specifies the file that contains the issuance authorization rules for issuing claims to this relying party."
+#$IssuanceTransformRulesFile = New-xDscResourceProperty -Name IssuanceTransformRulesFile -Type String -Attribute Write -Description "Specifies the file that contains the issuance transform rules for issuing claims to this relying party."
+#$MetadataFile = New-xDscResourceProperty -Name MetadataFile -Type String -Attribute Write -Description "Specifies a file path, such as c:\metadata.xml, that contains the federation metadata for this relying party trust."
+
+
+$AdditionalAuthenticationRules = New-xDscResourceProperty -Name AdditionalAuthenticationRules -Type String -Attribute Write -Description "Specifies the additional authorization rules to require additional authentication based on user, device and location attributes after the completion of the first step of authentication. Note: These rules must only be configured after there is at least one authentication provider enabled for additional authentication."
+$AdditionalWSFedEndpoint = New-xDscResourceProperty -Name AdditionalWSFedEndpoint -Type String[] -Attribute Write -Description "Specifies an array of alternate return addresses for the application. This is typically used when the application wants to indicate to AD FS what the return URL should be on successful token generation. AD FS requires that all acceptable URLs are entered as trusted information by the administrator."
+$AutoUpdateEnabled = New-xDscResourceProperty -Name AutoUpdateEnabled -Type Boolean -Attribute Write -Description "Indicates whether changes to the federation metadata by the MetadataURL parameter apply automatically to the configuration of the trust relationship. If this parameter has a value of $True, partner claims, certificates, and endpoints are updated automatically."
+$ClaimAccepted = New-xDscResourceProperty -Name ClaimAccepted -Type String[] -Attribute Write -Description "Specifies an array of claims that this relying party accepts."
+$ClaimsProviderName = New-xDscResourceProperty -Name ClaimsProviderName -Type String[] -Attribute Write -Description "Specifies the name of the claim provider."
+$DelegationAuthorizationRules = New-xDscResourceProperty -Name DelegationAuthorizationRules -Type String -Attribute Write -Description "Specifies the delegation authorization rules for issuing claims to this relying party."
+$Enabled = New-xDscResourceProperty -Name Enabled -Type Boolean -Attribute Write -Description "Indicates whether the relying party trust is enabled."
+$EnableJWT = New-xDscResourceProperty -Name EnableJWT -Type Boolean -Attribute Write -Description "Indicates whether the JSON Web Token (JWT) format should be used to issue a token on a WS-Federation request. By default, SAML tokens are issued over WS-Federation."
+$EncryptClaims = New-xDscResourceProperty -Name EncryptClaims -Type Boolean -Attribute Write -Description "Indicates whether the claims that are sent to the relying party are encrypted."
+$EncryptedNameIdRequired = New-xDscResourceProperty -Name EncryptedNameIdRequired -Type Boolean -Attribute Write -Description "Indicates whether the relying party requires that the NameID claim be encrypted."
+$EncryptionCertificate = New-xDscResourceProperty -Name EncryptionCertificate -Type String -Attribute Write -Description "Specifies the certificate to be used for encrypting claims that are issued to this relying party. Encypting claims is optional."
+$EncryptionCertificateRevocationCheck = New-xDscResourceProperty -Name EncryptionCertificateRevocationCheck -Type String -Attribute Write -ValidateSet "None","CheckEndCert","CheckEndCertCacheOnly","CheckChain","CheckChainCacheOnly","CheckChainExcludingRoot","CheckChainExcludingRootCacheOnly" -Description "Specifies the type of validation that should occur for the encryption certificate it is used for encrypting claims to the relying party."
+$Identifier = New-xDscResourceProperty -Name Identifier -Type String[] -Attribute Write -Description " Specifies the unique identifiers for this relying party trust. No other trust can use an identifier from this list. Uniform Resource Identifiers (URIs) are often used as unique identifiers for a relying party trust, but you can use any string of characters."
+$ImpersonationAuthorizationRules = New-xDscResourceProperty -Name ImpersonationAuthorizationRules -Type String -Attribute Write -Description "Specifies the impersonation authorization rules for issuing claims to this relying party."
+$IssuanceAuthorizationRules = New-xDscResourceProperty -Name IssuanceAuthorizationRules -Type String -Attribute Write -Description "Specifies the issuance authorization rules for issuing claims to this relying party."
+$IssuanceTransformRules = New-xDscResourceProperty -Name IssuanceTransformRules -Type String -Attribute Write -Description "Specifies the issuance transform rules for issuing claims to this relying party."
+$MetadataUrl = New-xDscResourceProperty -Name MetadataUrl -Type String -Attribute Write -Description "Specifies a URL at which the federation metadata for this relying party trust is available."
+$MonitoringEnabled = New-xDscResourceProperty -Name MonitoringEnabled -Type Boolean -Attribute Write -Description "Indicates whether periodic monitoring of this relying party federation metadata is enabled. The MetadataUrl parameter specifies the URL of the relying party federation metadata."
+$Name = New-xDscResourceProperty -Name Name -Type String -Attribute Key -Description "Specifies the friendly name of this relying party trust."
+$NotBeforeSkew = New-xDscResourceProperty -Name NotBeforeSkew -Type Sint32 -Attribute Write -Description "Specifies the skew, as in integer, for the time stamp that marks the beginning of the validity period."
+$Notes = New-xDscResourceProperty -Name Notes -Type String -Attribute Write -Description "Specifies notes for this relying party trust."
+$ProtocolProfile = New-xDscResourceProperty -Name ProtocolProfile -Type String -Attribute Write -ValidateSet "SAML","WsFederation","WsFed-SAML" -Description "Specifies which protocol profiles the relying party supports. The acceptable values for this parameter are:SAML, WsFederation, and WsFed-SAML."
+$RequestSigningCertificate = New-xDscResourceProperty -Name RequestSigningCertificate -Type String[] -Attribute Write -Description "Specifies an array of certificates to be used to verify the signature on a request from the relying party."
+$SamlEndpoint = New-xDscResourceProperty -Name SamlEndpoint -Type String[] -Attribute Write -Description "Specifies an array of Security Assertion Markup Language (SAML) protocol endpoints for this relying party."
+$SamlResponseSignature = New-xDscResourceProperty -Name SamlResponseSignature -Type String -Attribute Write -ValidateSet "AssertionOnly","MessageAndAssertion","MessageOnly" -Description "Specifies the response signature or signatures that the relying party expects. The acceptable values for this parameter are:AssertionOnly, MessageAndAssertion, and MessageOnly."
+$SignatureAlgorithm = New-xDscResourceProperty -Name SignatureAlgorithm -Type String -Attribute Write -ValidateSet "http://www.w3.org/2000/09/xmldsig#rsa-sha1","http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" -Description "Specifies the signature algorithm that the relying party uses for signing and verification."
+$SignedSamlRequestsRequired = New-xDscResourceProperty -Name SignedSamlRequestsRequired -Type Boolean -Attribute Write -Description "Indicates whether the Federation Service requires signed SAML protocol requests from the relying party. If you specify a value of $True, the Federation Service rejects unsigned SAML protocol requests."
+$SigningCertificateRevocationCheck = New-xDscResourceProperty -Name SigningCertificateRevocationCheck -Type String -Attribute Write -ValidateSet "None","CheckEndCert","CheckEndCertCacheOnly","CheckChain","CheckChainCacheOnly","CheckChainExcludingRoot","CheckChainExcludingRootCacheOnly" -Description "Specifies the type of certificate validation that occur when signatures on requests from the relying party are verified."
+$TokenLifetime = New-xDscResourceProperty -Name TokenLifetime -Type Sint32 -Attribute Write -Description "Specifies the duration, in minutes, for which the claims that are issued to the relying party are valid."
+$WSFedEndpoint = New-xDscResourceProperty -Name WSFedEndpoint -Type String -Attribute Write -Description "Specifies the WS-Federation Passive URL for this relying party."
+$Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Required -ValidateSet "Present","Absent" -Description "Specifies to remove or add the relying party trust."
+
+$xAdfsRelyingPartyTrustParams = @{
+    Name = 'MSFT_xAdfsRelyingPartyTrust'
+    Property = $AdditionalAuthenticationRules,$AdditionalWSFedEndpoint,$AutoUpdateEnabled,$ClaimAccepted,$ClaimsProviderName,$DelegationAuthorizationRules,$Enabled,$EnableJWT,$EncryptClaims,$EncryptedNameIdRequired,$EncryptionCertificate,$EncryptionCertificateRevocationCheck,$Identifier,$ImpersonationAuthorizationRules,$IssuanceAuthorizationRules,$IssuanceTransformRules,$MetadataUrl,$MonitoringEnabled,$Name,$NotBeforeSkew,$Notes,$ProtocolProfile,$RequestSigningCertificate,$SamlEndpoint,$SamlResponseSignature,$SignatureAlgorithm,$SignedSamlRequestsRequired,$SigningCertificateRevocationCheck,$TokenLifetime,$WSFedEndpoint,$Ensure
+
+    FriendlyName = 'xAdfsRelyingPartyTrust'
+    ModuleName = 'xAdfs'
+    Path = 'C:\Program Files\WindowsPowerShell\Modules\'
+}
+
+New-xDscResource @xAdfsRelyingPartyTrustParams
+
+

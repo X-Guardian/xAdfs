@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>6CAFC0C6-A428-4d30-A9F9-700E829FEA51</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyApplication</RootNamespace>
+    <AssemblyName>MyApplication</AssemblyName>
+    <Name>xAdfs</Name>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="DSCResources\" />
+    <Folder Include="DSCResources\MSFT_xAdfsFarm\" />
+    <Folder Include="DSCResources\Library\" />
+    <Folder Include="DSCResources\MSFT_xAdfsRelyingPartyTrust\" />
+    <Folder Include="DSCResources\MSFT_xAdfsFarmNode\" />
+    <Folder Include="Examples\" />
+    <Folder Include="Examples\WithConfigData\" />
+    <Folder Include="Examples\WithConfigData\Add Adfs FarmNode\" />
+    <Folder Include="Examples\WithConfigData\First Adfs Server\" />
+    <Folder Include="Misc\" />
+    <Folder Include="Tests\" />
+    <Folder Include="Tests\xAdfsRelyingPartyTrust\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DSCResources\Library\Helper.psm1" />
+    <Compile Include="DSCResources\MSFT_xAdfsFarmNode\MSFT-xAdfsFarmNode.psm1" />
+    <Compile Include="DSCResources\MSFT_xAdfsFarm\MSFT_xAdfsFarm.psm1" />
+    <Compile Include="DSCResources\MSFT_xAdfsFarm\MSFT_xAdfsFarm.schema.mof" />
+    <Compile Include="DSCResources\MSFT_xAdfsRelyingPartyTrust\MSFT_xAdfsRelyingPartyTrust.psm1" />
+    <Compile Include="DSCResources\MSFT_xAdfsRelyingPartyTrust\MSFT_xAdfsRelyingPartyTrust.schema.mof" />
+    <Compile Include="Examples\AddAdfsFarmNodeExample.ps1" />
+    <Compile Include="Examples\AdfsInstallExample.ps1" />
+    <Compile Include="Examples\OwaRelyingPartyTrustExample.ps1" />
+    <Compile Include="Examples\WithConfigData\Add Adfs FarmNode\InstallAdditionalAdfsServer-ConfigData.psd1" />
+    <Compile Include="Examples\WithConfigData\Add Adfs FarmNode\InstallAdditionalAdfsServer.ps1" />
+    <Compile Include="Examples\WithConfigData\First Adfs Server\InstallAdfsServer-ConfigData.psd1" />
+    <Compile Include="Examples\WithConfigData\First Adfs Server\InstallAdfsServer.ps1" />
+    <Compile Include="Misc\Generate_xAdfsFarm.ps1" />
+    <Compile Include="Misc\Generate_xAdfsFarmNode.ps1" />
+    <Compile Include="Misc\Generate_xAdfsRelyingPartyTrust.ps1" />
+    <Compile Include="Tests\ResourceDesignerTests.ps1" />
+    <Compile Include="Tests\xAdfsRelyingPartyTrust\xAdfsRelyingPartyTrust.ps1" />
+    <Compile Include="xAdfs.psd1" />
+    <Compile Include="xAdfs.tests.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DSCResources\MSFT_xAdfsFarmNode\MSFT_xAdfsFarmNode.schema.mof" />
+    <Content Include="Tests\xAdfsRelyingPartyTrust\xAdfsRelyingPartyTrust.Tests.ps1" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" />
+</Project>

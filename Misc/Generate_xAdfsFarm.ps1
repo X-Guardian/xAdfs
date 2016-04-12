@@ -1,0 +1,23 @@
+$CertThumb = New-xDscResourceProperty -Name CertificateThumbprint -Type String -Attribute Write -Description "Specifies the value of the certificate thumbprint of the certificate that should be used in the Secure Sockets Layer (SSL) binding of the Default Web Site in Internet Information Services (IIS). This value should match the thumbprint of a valid certificate in the Local Computer certificate store."
+$Credential = New-xDscResourceProperty -Name Credential -Type PSCredential -Attribute Required -Description "Specifies a PSCredential object based on a user name and password. To obtain a PSCredential object, use the Get-Credential cmdlet. For more information, type Get-Help Get-Credential. To use this cmdlet, you must supply credentials that have domain administrator privileges."
+$DecryptionCertificateThumbprint = New-xDscResourceProperty -Name DecryptionCertificateThumbprint -Type String -Attribute Required -Description "Specifies the value of the certificate thumbprint of the certificate that should be used for token decryption. If this parameter is used, the automatic certificate rollover feature will be disabled, and a token signing certificate must also be specified using the SigningCertificateThumbprint parameter. This value should match the thumbprint of a valid certificate in the Local Computer certificate store."
+$FederationServiceDisplayName = New-xDscResourceProperty -Name FederationServiceDisplayName -Type String -Attribute Write -Description "Specifies the display name of the Federation Service. The name that you specify is the organization for which this Federation Service issues tokens. For instance, you might specify Contoso Corporation. If you do not specify a value for this parameter, the Federation Service uses the value specified by the FederationServiceName parameter."
+$FederationServiceName = New-xDscResourceProperty -Name FederationServiceName -Type String -Attribute Key -Description "Specifies the DNS name of the federation service. This value must match the subject name of the certificate configured on the SSL binding in IIS."
+$GroupServiceAccountIdentifier = New-xDscResourceProperty -Name GroupServiceAccountIdentifier -Type String -Attribute Write -Description "Specifies the Group Managed Service Account under which the Active Directory Federation Services (AD FS) service runs."
+$OverwriteConfiguration = New-xDscResourceProperty -Name OverwriteConfiguration -Type Boolean -Attribute Write -Description "This parameter must be used to remove an existing Active Directory Federation Services (AD FS) configuration database and overwrite it with a new database."
+$ServiceAccountCredential = New-xDscResourceProperty -Name ServiceAccountCredential -Type PSCredential -Attribute Required -Description "Specifies the Active Directory account under which the AD FS service runs."
+$SigningCertificateThumbprint = New-xDscResourceProperty -Name SigningCertificateThumbprint -Type String -Attribute Required -Description "Specifies the value of the certificate thumbprint of the certificate that should be used for token signing. If this parameter is used, the automatic certificate rollover feature will be disabled, and a token decryption certificate must also be specified using the DecryptionCertificateThumbprint parameter. This value should match the thumbprint of a valid certificate in the Local Computer certificate store."
+$SQLConnectionString = New-xDscResourceProperty -Name SQLConnectionString -Type String -Attribute Required -Description "Specifies the SQL Server database that will store the AD FS configuration settings. If not specified, the AD FS installer uses the Windows Internal Database to store configuration settings."
+$SSLPort = New-xDscResourceProperty -Name SSLPort -Type Sint32 -Attribute Write -Description "Specifies the value of the port number of the SSL binding that the AD FS web site will use."
+$TlsClientPort = New-xDscResourceProperty -Name TlsClientPort -Type Sint32 -Attribute Write -Description "Specifies the port number that the AD FS service uses for Transport Layer Security (TLS) authentication for the user certificate client. The default value is 49443."
+
+
+$AdfsFarmParams = @{
+    Name = 'MSFT_xAdfsFarm'
+    Property = $CertThumb,$Credential,$DecryptionCertificateThumbprint,$FederationServiceDisplayName,$FederationServiceName,$GroupServiceAccountIdentifier,$OverwriteConfiguration,$ServiceAccountCredential,$SigningCertificateThumbprint,$SQLConnectionString,$SSLPort,$TlsClientPort
+    FriendlyName = 'xAdfsFarm'
+    ModuleName = 'xAdfs'
+    Path = 'C:\Program Files\WindowsPowerShell\Modules\'
+}
+
+New-xDscResource @AdfsFarmParams
