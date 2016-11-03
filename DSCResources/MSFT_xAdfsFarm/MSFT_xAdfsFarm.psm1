@@ -23,13 +23,18 @@ function Get-TargetResource
 		[parameter(Mandatory = $true)]
 		[System.String]
 		$SigningCertificateThumbprint,
+
+        [System.String]
+		$CertificateThumbprint,
 		
 		[System.String]
 		$SQLConnectionString
 	)
 
-    $AdfsCert = Get-AdfsCertificate
-    $AdfsProps = Get-AdfsProperties
+    $AdfsCert   = Get-AdfsCertificate
+    $AdfsProps  = Get-AdfsProperties
+	$AdfsSrvCIM = Get-CimInstance -ClassName Win32_Service -Filter "Name='adfssrv'"
+	
         	
 	$returnValue = @{
 		CertificateThumbprint = ($AdfsCert | where CertificateType -eq 'Service-Communications').Thumbprint		
@@ -96,18 +101,17 @@ function Set-TargetResource
     
     $PSBoundParameters.Add('ErrorAction','Stop')
 
-
-    Try
+    try
     {        
         Install-AdfsFarm @PSBoundParameters
     }
-    Catch
+    catch
     {
         if($_.exception.message -match 'Microsoft.IdentityServer.Diagnostic')
         {            
-            	Write-Warning "Missing required ADFS assemblies. System requires reboot"            
-            	$global:DSCMachineStatus = 1;
-		return
+            Write-Warning "Missing required ADFS assemblies. System requires reboot"            
+            $global:DSCMachineStatus = 1;
+		    return
         }
         else
         {
@@ -116,21 +120,21 @@ function Set-TargetResource
     }
 
     #Verify ADFS installation is successful by retrieving ADFS properties
-    Try
+    try
     {
         Write-Verbose "Verifying Adfs installation"
         $AdfsProps = Get-AdfsProperties -ErrorAction Stop
     }
-    Catch
+    catch
     {
         Write-Warning $_
     }
 
-    If($AdfsProps)
+    if($AdfsProps)
     {
         Write-Verbose "ADFS Properties found. Installation Successful"        
     }
-    Else
+    else
     {
         throw "ADFS properties not found.  Install failed."        
     }
