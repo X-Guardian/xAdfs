@@ -12,13 +12,11 @@
 #>
 
 
-# TODO: Customize these parameters...
-$Global:DSCModuleName      = 'xAdfs'
-$Global:DSCResourceName    = 'MSFT_xAdfsFarm'
-# /TODO
+$Global:DSCModuleName   = 'xAdfs'
+$Global:DSCResourceName = 'MSFT_xAdfsFarm'
 
 #region HEADER
-# Unit Test Template Version: 1.1.0
+
 [String] $moduleRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $Script:MyInvocation.MyCommand.Path))
 if ( (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
      (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) )
@@ -33,39 +31,11 @@ $TestEnvironment = Initialize-TestEnvironment `
     -TestType Unit 
 #endregion HEADER
 
-# TODO: Other Optional Init Code Goes Here...
-
 # Begin Testing
 try
-{
-    #region Pester Test Initialization
-
-    # TODO: Optionally create any variables here for use by your tests
-    # See https://github.com/PowerShell/xNetworking/blob/dev/Tests/Unit/MSFT_xDhcpClient.Tests.ps1
-    # Mocks that should be applied to all cmdlets being tested may
-    # also be created here if required.
-
-    #endregion Pester Test Initialization
-
-    # TODO: Common DSC Resource describe block structure
-    # The following three Describe blocks are included as a common test pattern.
-    # If a different test pattern would be more suitable, then test describe blocks
-    # may be completely replaced. The goal of this pattern should be to describe 
-    # the potential states a system could be in so that the get/test/set cmdlets
-    # can be tested in those states. Any mocks that relate to that specific state
-    # can be included in the relevant describe block. For a more detailed description
-    # of this approach please review https://github.com/PowerShell/DscResources/issues/143 
-
-    # Add as many of these example 'states' as required to simulate the scenarions that
-    # the DSC resource is designed to work with, below a simple "is in desired state" and
-    # "is not in desired state" are used, but there may be more complex combinations of 
-    # factors, depending on how complex your resource is.
-    InModuleScope $Global:DSCResourceName {
-        #region Example state 1
+{ 
+    InModuleScope 'MSFT_xAdfsFarm' {
         Describe "ADFS Farm does not exist but should" {
-        #TODO: Mock cmdlets here that represent the system not being in the desired state
-
-        #TODO: Create a set of parameters to test your get/test/set methods in this state
             $password = ConvertTo-SecureString -String password1 -AsPlainText -Force
             $adfsCred = New-Object System.Management.Automation.PSCredential ('contoso\admin',$password)
             $testParameters = @{
@@ -74,12 +44,11 @@ try
                 CertificateThumbprint           = "6F7E9F5543505B943FEEA49E651EDDD8D9D45011"
                 DecryptionCertificateThumbprint = "6F7E9F5543505B943FEEA49E651EDDD8D9D45012"
                 SigningCertificateThumbprint    = "6F7E9F5543505B943FEEA49E651EDDD8D9D45013"
-                ServiceAccountCredential = $adfsCred
-                Credential = $adfsCred
+                ServiceAccountCredential        = $adfsCred
+                Credential                      = $adfsCred
             }
 
             $mockAdfsCert = @(
-
                 @{
                     CertificateType = 'Service-Communications'
                     Thumbprint      = '6F7E9F5543505B943FEEA49E651EDDD8D9D45011'
@@ -101,8 +70,7 @@ try
             $mockCimService = @{
                 StartName = $adfsCred.UserName
             }        
-        
-        
+            
             Mock -CommandName Get-AdfsCertificate -MockWith { $mockAdfsCert}
             Mock -CommandName Get-CimInstance     -MockWith {$mockCimService}
             Mock -CommandName Get-AdfsProperties  -MockWith {$mockAdfsProperties}
@@ -112,7 +80,7 @@ try
     
             foreach ($parameter in $testParameters.keys) 
             {
-                if  ($parameter -eq 'ServiceAccountCredential')
+                if ($parameter -eq 'ServiceAccountCredential')
                 {
                     $getResult[$parameter]| should be ($testParameters[$parameter]).UserName
                 }
@@ -123,8 +91,7 @@ try
                     } 
                 }
             }
-         
-        
+                
             It "Test method returns false" {
                 Mock -CommandName Get-AdfsProperties -MockWith {}
                 Test-TargetResource @testParameters | Should be $false
@@ -138,47 +105,38 @@ try
             }
         }
     }
-    #endregion Example state 1
+    #endregion
 
-    #region Example state 2
+    #region
     Describe "The system is in the desired state" {
-        #TODO: Mock cmdlets here that represent the system being in the desired state
 
-        #TODO: Create a set of parameters to test your get/test/set methods in this state
+        $password = ConvertTo-SecureString -String password1 -AsPlainText -Force
+        $adfsCred = New-Object System.Management.Automation.PSCredential ('contoso\admin',$password)
         $testParameters = @{
-            Property1 = "value"
-            Property2 = "value"
+            FederationServiceName           = "sts.contoso.com"
+            FederationServiceDisplayName    = "Contoso Users"
+            CertificateThumbprint           = "6F7E9F5543505B943FEEA49E651EDDD8D9D45011"
+            DecryptionCertificateThumbprint = "6F7E9F5543505B943FEEA49E651EDDD8D9D45012"
+            SigningCertificateThumbprint    = "6F7E9F5543505B943FEEA49E651EDDD8D9D45013"
+            ServiceAccountCredential = $adfsCred
+            Credential = $adfsCred
         }
 
-        #TODO: Update the assertions below to align with the expected results of this state
-        It "Get method returns 'something'" {
-            #Get-TargetResource @testParameters | Should Be "something"
+        $mockAdfsProperties = @{
+            DisplayName = $testParameters.FederationServiceDisplayName
+            HostName    = $testParameters.FederationServiceName            
         }
 
         It "Test method returns true" {
-            #Test-TargetResource @testParameters | Should be $true
+            Mock -CommandName Get-AdfsProperties -MockWith {return $mockAdfsProperties}
+            Test-TargetResource @testParameters | Should be $true
         }
     }
-    #endregion Example state 1
+    #endregion
 
-    #region Non-Exported Function Unit Tests
-
-    # TODO: Pester Tests for any non-exported Helper Cmdlets
-    # If the resource does not contain any non-exported helper cmdlets then
-    # this block may be safetly deleted.
-    InModuleScope $Global:DSCResourceName {
-        # The InModuleScope command allows you to perform white-box unit testing
-        # on the internal (non-exported) code of a Script Module.
-
-    }
-    #endregion Non-Exported Function Unit Tests
 }
 finally
 {
-    #region FOOTER
     Restore-TestEnvironment -TestEnvironment $TestEnvironment
-    #endregion
-
-    # TODO: Other Optional Cleanup Code Goes Here...
 }
 
