@@ -1,185 +1,175 @@
 function Get-TargetResource
 {
-	[CmdletBinding()]
-	[OutputType([System.Collections.Hashtable])]
-	param
-	(
-		[parameter(Mandatory = $true)]
-		[System.String]
-		$Name,
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [parameter(Mandatory = $true)]
+        [System.String]
+        $Name,
 
-		[parameter(Mandatory = $true)]
-		[ValidateSet("Present","Absent")]
-		[System.String]
-		$Ensure
-	)
+        [parameter(Mandatory = $true)]
+        [ValidateSet("Present","Absent")]
+        [System.String]
+        $Ensure
+    )
 
-    Try
+    try
     {
         $AdfsSrv  = Get-Service -Name 'adfssrv' -ErrorAction Stop
     }
-    Catch
+    catch
     {
         Write-Warning $_
     }
 
-    If($AdfsSrv.Status -eq 'Running')
+    if ($AdfsSrv.Status -eq 'Running')
     {
-        $EnsureRslt = 'Present'
+        $ensureResult = 'Present'
     }
-    Else
+    else
     {
-        $EnsureRslt = 'Absent'
+        $ensureResult = 'Absent'
+    }
+    
+    $returnValue = @{
+        Name = $Name
+        Ensure = $ensureResult        
     }
 
 
-	<
-	$returnValue = @{
-		Name = $Name
-		CertificateThumbprint = [System.String]
-		GroupServiceAccountIdentifier = [System.String]
-		OverwriteConfiguration = [System.Boolean]
-		PrimaryComputerName = [System.String]
-		PrimaryComputerPort = [System.Int32]
-		ServiceAccountCredential = [System.Management.Automation.PSCredential]
-		Ensure = $EnsureRslt
-		SQLConnectionString = [System.String]
-	}
-
-
-	$returnValue
-	
+    $returnValue
+    
 }
 
 
 function Set-TargetResource
 {
-	[CmdletBinding()]
-	param
-	(
-		[parameter(Mandatory = $true)]
-		[System.String]
-		$Name,
+    [CmdletBinding()]
+    param
+    (
+        [parameter(Mandatory = $true)]
+        [System.String]
+        $Name,
 
-		[System.String]
-		$CertificateThumbprint,
+        [System.String]
+        $CertificateThumbprint,
 
-		[System.String]
-		$GroupServiceAccountIdentifier,
+        [System.String]
+        $GroupServiceAccountIdentifier,
 
-		[System.Boolean]
-		$OverwriteConfiguration,
+        [System.Boolean]
+        $OverwriteConfiguration,
 
-		[System.String]
-		$PrimaryComputerName,
+        [System.String]
+        $PrimaryComputerName,
 
-		[System.Int32]
-		$PrimaryComputerPort,
+        [System.Int32]
+        $PrimaryComputerPort,
 
-		[System.Management.Automation.PSCredential]
-		$ServiceAccountCredential,
+        [System.Management.Automation.PSCredential]
+        $ServiceAccountCredential,
 
-		[parameter(Mandatory = $true)]
-		[ValidateSet("Present","Absent")]
-		[System.String]
-		$Ensure,
+        [parameter(Mandatory = $true)]
+        [ValidateSet("Present","Absent")]
+        [System.String]
+        $Ensure,
 
-		[System.String]
-		$SQLConnectionString
-	)
+        [System.String]
+        $SQLConnectionString
+    )
 
     $PSBoundParameters.Add('ErrorAction','Stop') | Out-Null
     $PSBoundParameters.Remove('Name')
     $PSBoundParameters.Remove('Ensure')
 
-    If($Ensure -eq 'Present')
+    if ($Ensure -eq 'Present')
     {
-        Try
+        try
         {
             Write-Verbose "Adding AdfsFarmNode"
             $AddNode = Add-AdfsFarmNode @PSBoundParameters
 
-            If($AddNode.Status -eq 'Success')
+            if ($AddNode.Status -eq 'Success')
             {
                 Write-Verbose "$($AddNode.Message)"
             }
-            Else
+            else
             {
                 Write-Verbose "Installation failed"
                 throw "$($AddNode.Message)"
             }
         }
-        Catch
+        catch
         {
             throw $_
         }
     }
-    Else
+    else
     {
         Write-Verbose "Removing AdfsFarmNode"
         Uninstall-WindowsFeature -Name ADFS-Federation
     }
-
 
 }
 
 
 function Test-TargetResource
 {
-	[CmdletBinding()]
-	[OutputType([System.Boolean])]
-	param
-	(
-		[parameter(Mandatory = $true)]
-		[System.String]
-		$Name,
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [parameter(Mandatory = $true)]
+        [System.String]
+        $Name,
 
-		[System.String]
-		$CertificateThumbprint,
+        [System.String]
+        $CertificateThumbprint,
 
-		[System.String]
-		$GroupServiceAccountIdentifier,
+        [System.String]
+        $GroupServiceAccountIdentifier,
 
-		[System.Boolean]
-		$OverwriteConfiguration,
+        [System.Boolean]
+        $OverwriteConfiguration,
 
-		[System.String]
-		$PrimaryComputerName,
+        [System.String]
+        $PrimaryComputerName,
 
-		[System.Int32]
-		$PrimaryComputerPort,
+        [System.Int32]
+        $PrimaryComputerPort,
 
-		[System.Management.Automation.PSCredential]
-		$ServiceAccountCredential,
+        [System.Management.Automation.PSCredential]
+        $ServiceAccountCredential,
 
-		[parameter(Mandatory = $true)]
-		[ValidateSet("Present","Absent")]
-		[System.String]
-		$Ensure,
+        [parameter(Mandatory = $true)]
+        [ValidateSet("Present","Absent")]
+        [System.String]
+        $Ensure,
 
-		[System.String]
-		$SQLConnectionString
-	)
+        [System.String]
+        $SQLConnectionString
+    )
 
-    Try
+    try
     {
-        $AdfsSrv  = Get-Service -Name 'adfssrv' -ErrorAction Stop
+        $adfsService  = Get-Service -Name 'adfssrv' -ErrorAction Stop
     }
-    Catch
+    catch
     {
         Write-Warning $_
     }
 
-    If($Ensure -eq 'Present')
+    if ($Ensure -eq 'Present')
     {
-        If($AdfsSrv -eq $null -or $AdfsSrv.Status -ne 'Running')
+        if ($null -eq $adfsService  -or $adfsService.Status -ne 'Running')
         {
             Write-Verbose "ADFS service is not installed or not running"
             return $false
         }                
     }
     
-    If($AdfsSrv -ne $null -and $Ensure -eq 'Absent')
+    if ($null -ne $adfsService -and $Ensure -eq 'Absent')
     {
         Write-Verbose "Ensure: Present. Expected Absent"
         return $false

@@ -1,48 +1,54 @@
-﻿Function ArrayToString($Array)
+﻿function ArrayToString
 {
+    [CmdletBinding()]
+    param
+    (
+        [array] $Array
+    )
     #This fucntion expands an array and displays it as a string 
 
-    $StrArray = $null
+    $stringArray = $null
 
-    $array | % {[string]$StrArray += "$_, "}
+    $array | ForEach-Object {[string]$stringArray += "$_, "}
 
-    $StrLngth = $StrArray.Length
-    $StrArray.Trim().Substring(0,($StrLngth - 2))
+    $stringLength = $stringArray.Length
+    $stringArray.Trim().Substring(0,($stringLength - 2))
 }
 
-Function CompareArray
+function CompareArray
 {
-    [cmdletbinding()]
+    [CmdletBinding()]
     param(
-        [array]$ReferenceObject,
+        [array] $ReferenceObject,
 
-        [array]$DifferenceObject
+        [array] $DifferenceObject
     )
     
-    $CompareResults = Compare-Object $ReferenceObject $DifferenceObject
+    $compareResults = Compare-Object $ReferenceObject $DifferenceObject
 
-    if($CompareResults)
+    if ($compareResults)
     {
         return $false
     }
-    Else
+    else
     {
         return $true
     }
 
 }
 
-Function CompareAdfsRules
+function CompareAdfsRules
 {
+    [CmdletBinding()]
     param
     (
-        [string]$Current,
-        [string]$FromParam
+        [string] $Current,
+        [string] $FromParam
     )
 
-    $CurrentIssAuth = ((($Current -split '\n' ).trim() | where {$_} ) -join '')
-    $IssAuthParam = ((($FromParam -split '\n' ).trim() | where {$_} ) -join '')
+    $currentIssAuth = ((($Current -split '\n' ).trim() | where {$_} ) -join '')
+    $issAuthParam = ((($FromParam -split '\n' ).trim() | where {$_} ) -join '')
 
-    $CurrentIssAuth -eq $IssAuthParam
+    $currentIssAuth -eq $issAuthParam
 
 }

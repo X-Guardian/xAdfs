@@ -21,7 +21,7 @@ Configuration AddAdfsNode
         xImportPfxCertificate STS
         {
             Thumbprint = $node.AdfsServiceCommsCert
-            FilePath = $node.AdfsSrvCommsCertPath
+            FilePath = $node.adfsServiceCommsCertPath
             Exportable = $true
             Password = $StsCertPW
             CertStoreLocation = "Cert:\localmachine\My"
