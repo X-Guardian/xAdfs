@@ -1,4 +1,4 @@
-﻿function ArrayToString
+﻿function ConvertTo-String
 {
     [CmdletBinding()]
     param
@@ -15,7 +15,7 @@
     $stringArray.Trim().Substring(0,($stringLength - 2))
 }
 
-function CompareArray
+function Compare-Array
 {
     [CmdletBinding()]
     param(
@@ -37,7 +37,7 @@ function CompareArray
 
 }
 
-function CompareAdfsRules
+function Compare-AdfsRules
 {
     [CmdletBinding()]
     param
